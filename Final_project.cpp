@@ -9,8 +9,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include<string>
-#include<algorithm>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 vector<string> english_words;//total possible different words to translate;
@@ -18,7 +18,6 @@ vector<string> minion_words;
 vector<string> all_words;
 vector<string> translated_words;
 vector<string> temp_vec;
-
 
 string toLower(string str){
 	for(int i = 0; i<str.length();i++){
@@ -59,7 +58,11 @@ void get_trans(char * file_name){
 		}
 	}
 }
-
+/*
+ * reads lines in file
+ * separates words in line by spaces and punctuation
+ * adds words to all_words
+ */
 void read_file(char * file_name){
 	ifstream test_file;
 	string line, tempword,spaces,temp_upper;
@@ -68,14 +71,13 @@ void read_file(char * file_name){
 	if(!test_file.is_open()){
 		cout<<"The file could not be opened, check location\n";
 	}else{
-		line = "This article is about the 1961 film. For the 2008 Hindi film, see One Two Three (2008 film).";
 		while(getline(test_file,line)){
 			for(int i =0;i<line.length();i++){
-				if(line[i]==' '||line[i]==','||line[i]=='.'|| line[i]=='-'){
+				if(line[i]==' '||line[i]==','||line[i]=='.'|| line[i]=='-'|| line[i]=='!'|| line[i]=='?'){
 					temp_upper = tempword;
-					all_words.push_back(temp_upper);
+					all_words.push_back(temp_upper);//pushes tempword once punc. or space is reached
 					tempword ="";
-					spaces = line[i];
+					spaces = line[i];//location of punc. or space
 					all_words.push_back(spaces);
 				}else{
 					tempword +=line[i];
@@ -87,8 +89,12 @@ void read_file(char * file_name){
 		cout<<all_words[i];
 	}
 }
+
+/*
+ * searches for word in vector
+ * returns true if found
+ */
 bool find_word(string word,vector <string> vec){
-	string temp;
 
 	if(find(vec.begin(),vec.end(),word) != vec.end()){
 		return true;
@@ -97,19 +103,31 @@ bool find_word(string word,vector <string> vec){
 	}
 }
 
+/*
+ * compares words from file with the english words
+ * if word is found pushes translated version of word
+ * else pushed the word from original file
+ */
 bool add_translated_words(){
-	string temp;
+	string temp,original, matchCase;
 	cout<<"\n";
-	for(int i =0; i<all_words.size();i++){
-		if(find_word(all_words[i],english_words)){
-			temp = all_words[i];
-			for(int j = 0;j<english_words.size();j++){
-				if(english_words[j]==temp){
-					translated_words.push_back(minion_words[j]);
+	for(int i =0; i<all_words.size();i++){//loops all words
+		original = all_words[i];
+		if(find_word(toLower(all_words[i]),english_words)){//finds word in english translations
+			temp = toLower(all_words[i]);
+			for(int j = 0;j<english_words.size();j++){//finds index in english words to find translation
+				if(temp == english_words[j]){
+					if(isupper(original[0])){//fixes capitalization problem at beginning of sentences
+						matchCase = minion_words[j];
+						matchCase[0]= toupper(matchCase[0]);
+						translated_words.push_back(matchCase);
+					}else{
+						translated_words.push_back(minion_words[j]);
+					}
 				}
 			}
 		}else{
-			translated_words.push_back(all_words[i]);
+			translated_words.push_back(all_words[i]);//if no translation found, pushes original word
 		}
 	}
 
@@ -121,8 +139,13 @@ bool add_translated_words(){
 
 int main() {
 
+
 	get_trans("minion_to_english.txt");
-	read_file("test_file.txt");
+
+	read_file("test2.txt");
+	//for(int i = 0; i<all_words.size();i++){
+		//cout<<all_words[i]<<endl;
+	//}
 	add_translated_words();
 	return 0;
 }
