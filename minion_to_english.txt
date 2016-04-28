@@ -10,8 +10,8 @@ Tatata bala tu=I hate you
 Baboi=Toy
 Po ka=What
 Bable=Apple
-Gelato=Ice cream
-Butt=Butt
+Gelatoooo=Ice cream
+Butt=ass
 Hana=One
 Hana=1
 Dul=2
@@ -23,9 +23,12 @@ Chasy=Chair
 Kan pai=Cheers
 Pwede na=Can we start
 Luk at tu=Look at you
-Muak Muak Muak=Kiss kiss
+Muak=kiss
 Bi do=I'm sorry
 La Boda=Marriage
 Buttom=Bottom
-Stupa Stupa=Stop Stop
+Stupa=Stop
 Sa la ka=How dare you
+
+
+
