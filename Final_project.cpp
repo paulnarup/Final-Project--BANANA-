@@ -8,16 +8,16 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <limits>
+#include <limits>//check for number input
 using namespace std;
 
 vector<string> english_words;//total possible different words to translate;
-vector<string> minion_words;
-vector<string> all_words;
-vector<string> translated_words;
+vector<string> minion_words;//minion translations
+vector<string> all_words;//words from user's file
+vector<string> translated_words;//translated results
 
 
-string toLower(string str){
+string toLower(string str){//changes string to lowercase
 	for(int i = 0; i<str.length();i++){
 		if(isupper(str[i])){
 			str[i] = tolower(str[i]);
@@ -61,7 +61,6 @@ void get_trans(char * file_name){
  * adds words to all_words
  */
 void read_file(){
-
 	ifstream test_file;
 	string file_name, line, tempword,spaces,temp_upper;
 
@@ -137,7 +136,7 @@ void write_to_file(){
 
 	cout<<"Would you like a new file or include translation in the old file to compare?"<<endl;
 	cout<<"Press 1 for new file. Press 2 for compare file."<<endl;
-	while(!(cin >> temp)|| (temp!=1 && temp!=2)){
+	while(!(cin >> temp)|| (temp!=1 && temp!=2)){//check for numerical input and value
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout<<"Press 1 for new file. Press 2 for compare file."<<endl;
@@ -166,9 +165,23 @@ void write_to_file(){
 }
 
 int main() {
+	char type;
 	get_trans("minion_to_english.txt");
 	read_file();
 	add_translated_words();
 	write_to_file();
+
+	do
+	{
+	    cout << "Would you like the translation written to the console? [y/n]" << endl;
+	    cin >> type;
+	}
+	while( !cin.fail() && type!='y' && type!='n' );
+	if(type == 'y'){
+		for(int i = 0; i<translated_words.size(); i++){
+			cout<<translated_words[i];
+		}
+
+	}
 	return 0;
 }
