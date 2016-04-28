@@ -147,12 +147,12 @@ void write_to_file(){
 			outfile<<translated_words[j];
 		}
 		outfile.close();
-	}else{
+	}else if(temp ==2){
 		outfile.open("comparision.txt");
 		for(int i=0;i<all_words.size();i++){
 			outfile<<all_words[i];
 		}
-		outfile<<"\n";
+		outfile<<"\n\n";
 		for(int j=0;j<translated_words.size();j++){
 			outfile<<translated_words[j];
 		}
@@ -169,7 +169,6 @@ int main() {
 	get_trans("minion_to_english.txt");
 	read_file();
 	add_translated_words();
-	write_to_file();
 
 	do
 	{
@@ -183,5 +182,14 @@ int main() {
 		}
 
 	}
+	do
+		{
+		    cout << "\nWould you like to see the results in a file? [y/n]" << endl;
+		    cin >> type;
+		}
+		while( !cin.fail() && type!='y' && type!='n' );
+		if(type == 'y'){
+			write_to_file();
+		}
 	return 0;
 }
