@@ -11,13 +11,14 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <limits>
 using namespace std;
 
 vector<string> english_words;//total possible different words to translate;
 vector<string> minion_words;
 vector<string> all_words;
 vector<string> translated_words;
-vector<string> temp_vec;
+
 
 string toLower(string str){
 	for(int i = 0; i<str.length();i++){
@@ -29,7 +30,6 @@ string toLower(string str){
 }
 
 /*
- * reads file with translations seperated by '='
  * puts english words into one vector
  * puts minion words into another vector
  * index of english word and minion translation are equal
@@ -63,17 +63,18 @@ void get_trans(char * file_name){
  * separates words in line by spaces and punctuation
  * adds words to all_words
  */
-void read_file(char * file_name){
+void read_file(){
+
 	ifstream test_file;
-	string line, tempword,spaces,temp_upper;
-	int j=0;
-	test_file.open(file_name);
-	if(!test_file.is_open()){
-		cout<<"The file could not be opened, check location\n";
-	}else{
+	string file_name, line, tempword,spaces,temp_upper;
+
+	cout<<"What file would you like to translate?"<<endl;
+	cin>>file_name;
+	test_file.open(file_name.c_str());
+	if(test_file.is_open()){
 		while(getline(test_file,line)){
 			for(int i =0;i<line.length();i++){
-				if(line[i]==' '||line[i]==','||line[i]=='.'|| line[i]=='-'|| line[i]=='!'|| line[i]=='?'){
+				if(line[i]=='.'||line[i]=='!'|| line[i]=='?'){
 					temp_upper = tempword;
 					all_words.push_back(temp_upper);//pushes tempword once punc. or space is reached
 					tempword ="";
@@ -83,25 +84,18 @@ void read_file(char * file_name){
 					tempword +=line[i];
 				}
 			}
+			all_words.push_back("\n");
 		}
-	}
-	for(int i = 0;i<all_words.size();i++){
-		cout<<all_words[i];
-	}
-}
-
-/*
- * searches for word in vector
- * returns true if found
- */
-bool find_word(string word,vector <string> vec){
-
-	if(find(vec.begin(),vec.end(),word) != vec.end()){
-		return true;
 	}else{
-		return false;
+		cout<<"The file could not be opened, check location\n";
+		read_file();
 	}
+
+
 }
+
+
+
 
 /*
  * compares words from file with the english words
@@ -109,43 +103,75 @@ bool find_word(string word,vector <string> vec){
  * else pushed the word from original file
  */
 bool add_translated_words(){
-	string temp,original, matchCase;
+	string temp,original, matchCase, phrase;
+	int startpos, endpos, length;
 	cout<<"\n";
 	for(int i =0; i<all_words.size();i++){//loops all words
-		original = all_words[i];
-		if(find_word(toLower(all_words[i]),english_words)){//finds word in english translations
-			temp = toLower(all_words[i]);
-			for(int j = 0;j<english_words.size();j++){//finds index in english words to find translation
-				if(temp == english_words[j]){
-					if(isupper(original[0])){//fixes capitalization problem at beginning of sentences
-						matchCase = minion_words[j];
-						matchCase[0]= toupper(matchCase[0]);
-						translated_words.push_back(matchCase);
+		matchCase = all_words[i];
+		phrase = toLower(all_words[i]);
+		for(int k =0; k<english_words.size();k++){//loops english words finding if all_words contains them
+			if(phrase.find(english_words[k])!= string::npos){//if found erase english and insert minion
+				startpos = phrase.find(english_words[k]);
+				endpos = startpos + english_words[k].length();
+				length = endpos - startpos;
+				phrase.erase(startpos, length);
+				phrase.insert(startpos, minion_words[k]);
+				if(isupper(matchCase[0])||isupper(matchCase[1])){//first letter of sentence capitalization
+					if(phrase[0]==' '){//checks for space after punctuation
+						phrase[1] = toupper(phrase[1]);
 					}else{
-						translated_words.push_back(minion_words[j]);
+						phrase[0] = toupper(phrase[0]);
 					}
 				}
+
 			}
-		}else{
-			translated_words.push_back(all_words[i]);//if no translation found, pushes original word
 		}
+		translated_words.push_back(phrase);
 	}
 
-	for(int i = 0;i<translated_words.size();i++){
-		cout<<translated_words[i];
-	}
+
+
 	return false;
 }
 
+void write_to_file(){
+	ofstream outfile;
+	int temp;
+
+	cout<<"Would you like a new file or include translation in the old file to compare?"<<endl;
+	cout<<"Press 1 for new file. Press 2 for compare file."<<endl;
+	while(!(cin >> temp)|| (temp!=1 && temp!=2)){
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout<<"Press 1 for new file. Press 2 for compare file."<<endl;
+	}
+	if(temp ==1){
+		outfile.open("translation.txt");
+		for(int j=0;j<translated_words.size();j++){
+			outfile<<translated_words[j];
+		}
+		outfile.close();
+	}else{
+		outfile.open("comparision.txt");
+		for(int i=0;i<all_words.size();i++){
+			outfile<<all_words[i];
+		}
+		outfile<<"\n";
+		for(int j=0;j<translated_words.size();j++){
+			outfile<<translated_words[j];
+		}
+		outfile.close();
+	}
+
+
+
+
+}
+
 int main() {
-
-
 	get_trans("minion_to_english.txt");
-
-	read_file("test2.txt");
-	//for(int i = 0; i<all_words.size();i++){
-		//cout<<all_words[i]<<endl;
-	//}
+	read_file();
 	add_translated_words();
+	write_to_file();
 	return 0;
 }
