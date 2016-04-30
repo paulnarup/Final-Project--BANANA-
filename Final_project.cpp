@@ -57,8 +57,8 @@ void get_trans(char * file_name){
 }
 /*
  * reads lines in file
- * separates words in line by spaces and punctuation
- * adds words to all_words
+ * separates file into sentences
+ * adds sentences to all_words
  */
 void read_file(){
 	ifstream test_file;
@@ -70,7 +70,7 @@ void read_file(){
 	if(test_file.is_open()){
 		while(getline(test_file,line)){
 			for(int i =0;i<line.length();i++){
-				if(line[i]=='.'||line[i]=='!'|| line[i]=='?'){
+				if(line[i]=='.'||line[i]=='!'|| line[i]=='?'){//split by end of sentence
 					temp_upper = tempword;
 					all_words.push_back(temp_upper);//pushes tempword once punc. or space is reached
 					tempword ="";
