@@ -2,7 +2,7 @@ Paul Narup
 Final Project
 BANANA
 	My banana final project is a translator that takes an English file and translates it to the minion language. 
-It takes a list of minion to English words, separated by ‘=’, and reads them into two vectors, English words and minion words. 
+It takes a list of minion to English words, separated by â€˜=â€™, and reads them into two vectors, English words and minion words. 
 It asks the user for the file and reads that file into a vector. It then finds the English words that have a minion translation and reads the file into a final vector that includes the replacements for the translated words. 
 It then asks the user if they want a blank file with only the translation, or a file that includes their initial file with the translation which can be used for comparison. 
 
@@ -12,8 +12,10 @@ The direct access allows for easy changes of elements when a translation is foun
 
 
 Step by step: 
-	Located the file that will be used for translation 
+	put minion_to_english.txt in proper folder to implement translations
+	Locate the file that you wish to translate
 	Put file in proper location in project folder
+		for test use test.txt 
 	Run program 
 	Follow on screen instructions
 	Open project folder for result files 
