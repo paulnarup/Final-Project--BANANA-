@@ -25,7 +25,6 @@ string toLower(string str){//changes string to lowercase
 	}
 	return str;
 }
-
 /*
  * puts english words into one vector
  * puts minion words into another vector
@@ -86,13 +85,7 @@ void read_file(){
 		cout<<"The file could not be opened, check location\n";
 		read_file();
 	}
-
-
 }
-
-
-
-
 /*
  * compares words from file with the english words
  * if word is found pushes translated version of word
@@ -124,12 +117,8 @@ bool add_translated_words(){
 		}
 		translated_words.push_back(phrase);
 	}
-
-
-
 	return false;
 }
-
 void write_to_file(){
 	ofstream outfile;
 	int temp;
@@ -158,10 +147,6 @@ void write_to_file(){
 		}
 		outfile.close();
 	}
-
-
-
-
 }
 
 int main() {
